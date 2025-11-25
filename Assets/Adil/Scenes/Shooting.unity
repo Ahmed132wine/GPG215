@@ -291,7 +291,38 @@ MonoBehaviour:
   moveSpeed: 10
   paddingX: 0.5
   fireRate: 0.2
-  firePoint: {fileID: 0}
+  firePoint: {fileID: 1557048207}
+--- !u!1 &1557048206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1557048207}
+  m_Layer: 0
+  m_Name: Fire Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1557048207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557048206}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.0011623639, y: 0.5449618, z: -0.36805508}
+  m_LocalScale: {x: 0.400831, y: 0.400831, z: 0.400831}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1226120239}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1597838270
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,6 +675,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7878350319992209165, guid: 3f5f39e238c697a4084067bb993a8464, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1767809810}
+    - targetCorrespondingSourceObject: {fileID: 7878350319992209165, guid: 3f5f39e238c697a4084067bb993a8464, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1557048207}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3f5f39e238c697a4084067bb993a8464, type: 3}
       insertIndex: -1

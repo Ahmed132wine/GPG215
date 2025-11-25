@@ -18,6 +18,22 @@ public class Bullet : MonoBehaviour
             Hide();
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            EnemyHealth enemy = other.GetComponent<EnemyHealth>();
+
+            if (enemy != null)
+            {
+                enemy.TakeDamage(5f);
+            }
+
+            Hide();
+        }
+
+    }
     void Hide()
     {
         gameObject.SetActive(false);
