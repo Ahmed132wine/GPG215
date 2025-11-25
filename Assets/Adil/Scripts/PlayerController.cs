@@ -4,107 +4,39 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     [Header("Settings")]
-    public float speed = 5f;
-    public KeyCode upKey;
-    public KeyCode downKey;
-    public KeyCode leftKey;
-    public KeyCode rightKey;
+    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float paddingX = 0.5f;
 
-    [Header("References")]
-    public GameObject wallPrefab;
-    public Transform wallHolder;
-
-    private Collider2D myCollider;
-    private Vector2 direction;
-    private GameObject currentWall;
-    private Vector2 lastWallEndPosition;
+    private Camera mainCamera;
+    private Vector2 minScreenBounds;
+    private Vector2 maxScreenBounds;
 
 
     private void Start()
     {
-        myCollider = GetComponent<Collider2D>();
-        direction = Vector2.up;
-        SpawnWall();
+        mainCamera =Camera.main;
+        CalculateBounds();
+    }
+    private void CalculateBounds()
+    {
+        minScreenBounds = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0));
+        maxScreenBounds = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, 0));
     }
 
     private void Update()
     {
-        Move();
-        CheckInput();
+        HandleMovement();
     }
 
-    void Move()
+    private void HandleMovement()
     {
-        transform.Translate(direction * speed * Time.deltaTime);
-    }
-
-    void CheckInput()
-    {
-        if (Input.GetKeyDown(upKey) && direction != Vector2.down)
+        if (Input.GetMouseButton(0))
         {
-            Turn(Vector2.up);
-        }
-        else if (Input.GetKeyDown(downKey) && direction != Vector2.up)
-        {
-            Turn(Vector2.down);
-        }
-        else if (Input.GetKeyDown(leftKey) && direction != Vector2.right)
-        {
-            Turn(Vector2.left);
-        }
-        else if (Input.GetKeyDown(rightKey) && direction != Vector2.left)
-        {
-            Turn(Vector2.right);
-        }
-    }
-
-    void SpawnWall()
-    {
-        lastWallEndPosition = transform.position;
-        currentWall = Instantiate(wallPrefab, transform.position, Quaternion.identity);
-        if (wallHolder != null) currentWall.transform.SetParent(wallHolder);
-    }
-
-    void UpdateWall()
-    {
-        FitWallToGap();
-    }
-
-    void Turn( Vector2 newDirection)
-    {
-        if (direction == newDirection) return;
-
-        FitWallToGap();
-
-        direction = newDirection;
-
-        SpawnWall();
-    }
-
-    void FitWallToGap()
-    {
-        if (currentWall == null) return;
-        Vector2 currentPos = transform.position;
-        float distance = Vector2.Distance(lastWallEndPosition, currentPos);
-
-        currentWall.transform.position = lastWallEndPosition + (direction * distance * 0.5f);
-
-        if (direction == Vector2.up || direction == Vector2.down)
-        {
-            currentWall.transform.localScale = new Vector3(0.2f, distance, 1f);
-        }
-        else
-        {
-            currentWall.transform.localScale = new Vector3(distance, 0.2f, 1f);
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.transform != currentWall.transform)
-        {
-            FindObjectOfType<GameManager>().GameOver();
-            Destroy(gameObject);
+            Vector3 touchPos = Input.mousePosition;
+            Vector3 worldPos = mainCamera.ScreenToWorldPoint(touchPos);
+            float targetX = Mathf.Lerp(transform.position.x, worldPos.x, moveSpeed * Time.deltaTime);
+            float clampedX = Mathf.Clamp(targetX, minScreenBounds.x + paddingX, maxScreenBounds.x - paddingX);
+            transform.position = new Vector2(clampedX, transform.position.y);
         }
     }
 }
