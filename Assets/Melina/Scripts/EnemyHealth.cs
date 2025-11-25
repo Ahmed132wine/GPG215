@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public float maxHealth = 100f;
+    public float maxHealth = 20f;
     public float currentHealth;
     public Image healthFill;
     public Canvas healthCanvas;
@@ -49,6 +49,11 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
+        if (ScoreManager.instance != null)
+        {
+            ScoreManager.instance.AddScore(100); 
+        }
+        
         Destroy(gameObject);
     }
 }
