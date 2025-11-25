@@ -7,6 +7,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float paddingX = 0.5f;
 
+    [Header("Shooting")]
+    [SerializeField] private float fireRate = 0.2f;
+    [SerializeField] private Transform firePoint;
+    private float nextFireTime = 0f;
+
     private Camera mainCamera;
     private Vector2 minScreenBounds;
     private Vector2 maxScreenBounds;
@@ -26,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleMovement();
+        HandleShooting();
     }
 
     private void HandleMovement()
@@ -37,6 +43,28 @@ public class PlayerController : MonoBehaviour
             float targetX = Mathf.Lerp(transform.position.x, worldPos.x, moveSpeed * Time.deltaTime);
             float clampedX = Mathf.Clamp(targetX, minScreenBounds.x + paddingX, maxScreenBounds.x - paddingX);
             transform.position = new Vector2(clampedX, transform.position.y);
+        }
+    }
+
+    private void HandleShooting()
+    {
+        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
+        {
+            Shoot();
+            nextFireTime = Time.time + fireRate;
+        }
+    }
+
+    private void Shoot()
+    {
+        GameObject bullet = ObjectPool.Instance.GetBullet();
+
+        if (bullet != null)
+        {
+            bullet.transform.position = transform.position;
+            bullet.transform.rotation = Quaternion.identity;
+
+            bullet.SetActive(true);
         }
     }
 }
