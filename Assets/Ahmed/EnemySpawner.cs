@@ -7,12 +7,15 @@ public class EnemySpawner : MonoBehaviour
     [Header("Spawning")]
     public GameObject enemyPrefab;
     public int maxEnemies = 2;
-    public float spawnYOffset = 3f;             // above top of screen
+    public float spawnYOffset = 3f;
     public float minHorizontalSeparation = 1.5f;
 
     private int activeEnemies = 0;
     private Camera cam;
     private float lastSpawnX = 999f;
+
+    // -1, +1, -1, +1...
+    private int nextLaneIndex = -1;
 
     private void Awake()
     {
@@ -23,7 +26,6 @@ public class EnemySpawner : MonoBehaviour
     {
         cam = Camera.main;
 
-        // Spawn initial enemies
         for (int i = 0; i < maxEnemies; i++)
         {
             SpawnEnemy();
@@ -34,13 +36,12 @@ public class EnemySpawner : MonoBehaviour
     {
         if (enemyPrefab == null || cam == null) return;
 
-        float halfHeight = cam.orthographicSize;      // 5
-        float halfWidth = halfHeight * cam.aspect;   // depends on 9:16
+        float halfHeight = cam.orthographicSize;
+        float halfWidth = halfHeight * cam.aspect;
 
         float x;
         int attempts = 0;
 
-        // try to avoid spawning too close to previous X
         do
         {
             x = Random.Range(
@@ -53,10 +54,18 @@ public class EnemySpawner : MonoBehaviour
 
         lastSpawnX = x;
 
-        float y = cam.transform.position.y + halfHeight + spawnYOffset; // 5 + 3 = 8
+        float y = cam.transform.position.y + halfHeight + spawnYOffset;
 
-        Instantiate(enemyPrefab, new Vector3(x, y, 0f), Quaternion.identity);
+        GameObject enemyObj = Instantiate(enemyPrefab, new Vector3(x, y, 0f), Quaternion.identity);
         activeEnemies++;
+
+        // Assign lane (-1 or +1) to this enemy
+        EnemyController ctrl = enemyObj.GetComponent<EnemyController>();
+        if (ctrl != null)
+        {
+            ctrl.SetLane(nextLaneIndex);
+            nextLaneIndex *= -1; // flip for next spawn
+        }
     }
 
     public void NotifyEnemyDestroyed()

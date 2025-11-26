@@ -5,9 +5,9 @@ public class EnemyController : MonoBehaviour
 {
     [Header("Movement")]
     public float enterSpeed = 3f;          // vertical slide speed
-    public float horizontalSpeed = 2f;     // how fast they slide toward player's X
+    public float horizontalSpeed = 2f;     // follow speed on X
     public float stopOffsetFromTop = 2f;   // how far below top edge we stop
-    public float followSmooth = 3f;        // how quickly we lerp toward player.x
+    public float laneOffset = 1.5f;        // horizontal offset from player for each lane
 
     [Header("Shooting")]
     public GameObject enemyBulletPrefab;
@@ -18,6 +18,9 @@ public class EnemyController : MonoBehaviour
     private Transform _player;
     private float _targetY;
     private float _nextFireTime;
+
+    // -1 = left, +1 = right
+    private int _laneIndex = 0;
 
     private enum State { Entering, Attacking }
     private State _state;
@@ -31,9 +34,15 @@ public class EnemyController : MonoBehaviour
             _player = playerObj.transform;
 
         float camTop = _cam.transform.position.y + _cam.orthographicSize;
-        _targetY = camTop - stopOffsetFromTop; // with size 5 and offset 2 => y = 3
+        _targetY = camTop - stopOffsetFromTop;
 
         _state = State.Entering;
+    }
+
+    // Called by the spawner right after instantiate
+    public void SetLane(int laneIndex)
+    {
+        _laneIndex = Mathf.Clamp(laneIndex, -1, 1);
     }
 
     private void Update()
@@ -64,23 +73,28 @@ public class EnemyController : MonoBehaviour
     {
         Vector3 pos = transform.position;
 
-        // Smoothly follow player's X (but slower)
-        float targetX = _player.position.x;
-        pos.x = Mathf.Lerp(pos.x, targetX, followSmooth * Time.deltaTime);
+        // target lane position relative to player
+        float targetX = _player.position.x + _laneIndex * laneOffset;
+        float dx = targetX - pos.x;
+        float dir = Mathf.Sign(dx);
 
-        // Clamp within camera width
-        float halfHeight = _cam.orthographicSize;
-        float halfWidth = halfHeight * _cam.aspect;
+        if (Mathf.Abs(dx) > 0.05f)
+        {
+            pos.x += dir * horizontalSpeed * Time.deltaTime;
 
-        pos.x = Mathf.Clamp(
-            pos.x,
-            _cam.transform.position.x - halfWidth + 0.5f,
-            _cam.transform.position.x + halfWidth - 0.5f
-        );
+            float halfHeight = _cam.orthographicSize;
+            float halfWidth = halfHeight * _cam.aspect;
+
+            pos.x = Mathf.Clamp(
+                pos.x,
+                _cam.transform.position.x - halfWidth + 0.5f,
+                _cam.transform.position.x + halfWidth - 0.5f
+            );
+        }
 
         transform.position = pos;
 
-        // Shoot straight down
+        // shooting
         if (Time.time >= _nextFireTime)
         {
             Shoot();
