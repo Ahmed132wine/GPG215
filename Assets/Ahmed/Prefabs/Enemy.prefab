@@ -136,8 +136,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: 0.999994, w: -0.0034905854}
   m_LocalPosition: {x: -1.24, y: 5.22, z: 0}
-  m_LocalScale: {x: 3.38, y: 3.38, z: 3.38}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1.9999999, y: 1.9999999, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9038329708124919064}
   - {fileID: 3143540237332308625}
@@ -276,10 +276,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 442c7ce29c749f745b2672df88eeff5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
-  maxHealth: 3
-  enterSpeed: 2
+  enterSpeed: 3
   horizontalSpeed: 2
-  stopOffsetFromTop: 0.5
+  stopOffsetFromTop: 2
   enemyBulletPrefab: {fileID: 364445126848632595, guid: d99ec074a6ef0a74db528eb22b993645, type: 3}
   firePoint: {fileID: 3143540237332308625}
   fireRate: 1.2

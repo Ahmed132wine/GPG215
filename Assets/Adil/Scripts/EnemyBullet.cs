@@ -8,11 +8,12 @@ public class EnemyBullet : MonoBehaviour
 
     private void OnEnable()
     {
-        Invoke("Hide", lifeTime);
+        Invoke(nameof(Hide), lifeTime);
     }
 
     private void Update()
     {
+        // Move straight down in world space
         transform.Translate(Vector2.down * speed * Time.deltaTime);
     }
 
@@ -22,7 +23,7 @@ public class EnemyBullet : MonoBehaviour
         {
             PlayerHealth hp = other.GetComponent<PlayerHealth>();
             if (hp != null)
-                hp.TakeDamage(damage);
+                hp.TakeDamage(damage);  // uses your existing PlayerHealth script :contentReference[oaicite:1]{index=1}
 
             Hide();
         }

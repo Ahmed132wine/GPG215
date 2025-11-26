@@ -4,9 +4,10 @@ using System.Collections;
 public class EnemyController : MonoBehaviour
 {
     [Header("Movement")]
-    public float enterSpeed = 2f;           // how fast enemy slides down into view
-    public float horizontalSpeed = 2f;      // left/right follow speed
-    public float stopOffsetFromTop = 0.5f;  // how far below top of screen enemy stops
+    public float enterSpeed = 3f;          // vertical slide speed
+    public float horizontalSpeed = 2f;     // how fast they slide toward player's X
+    public float stopOffsetFromTop = 2f;   // how far below top edge we stop
+    public float followSmooth = 3f;        // how quickly we lerp toward player.x
 
     [Header("Shooting")]
     public GameObject enemyBulletPrefab;
@@ -29,9 +30,8 @@ public class EnemyController : MonoBehaviour
         if (playerObj != null)
             _player = playerObj.transform;
 
-        // Calculate Y where enemy stops
         float camTop = _cam.transform.position.y + _cam.orthographicSize;
-        _targetY = camTop - stopOffsetFromTop;
+        _targetY = camTop - stopOffsetFromTop; // with size 5 and offset 2 => y = 3
 
         _state = State.Entering;
     }
@@ -40,16 +40,10 @@ public class EnemyController : MonoBehaviour
     {
         if (_player == null) return;
 
-        switch (_state)
-        {
-            case State.Entering:
-                EnteringMovement();
-                break;
-
-            case State.Attacking:
-                AttackingBehaviour();
-                break;
-        }
+        if (_state == State.Entering)
+            EnteringMovement();
+        else
+            AttackingBehaviour();
     }
 
     private void EnteringMovement()
@@ -70,27 +64,23 @@ public class EnemyController : MonoBehaviour
     {
         Vector3 pos = transform.position;
 
-        // Horizontal follow only
-        float dx = _player.position.x - pos.x;
-        float direction = Mathf.Sign(dx);
+        // Smoothly follow player's X (but slower)
+        float targetX = _player.position.x;
+        pos.x = Mathf.Lerp(pos.x, targetX, followSmooth * Time.deltaTime);
 
-        if (Mathf.Abs(dx) > 0.05f)
-        {
-            pos.x += direction * horizontalSpeed * Time.deltaTime;
+        // Clamp within camera width
+        float halfHeight = _cam.orthographicSize;
+        float halfWidth = halfHeight * _cam.aspect;
 
-            // Clamp within camera horizontal bounds
-            float halfHeight = _cam.orthographicSize;
-            float halfWidth = halfHeight * _cam.aspect;
-            pos.x = Mathf.Clamp(
-                pos.x,
-                _cam.transform.position.x - halfWidth + 0.5f,
-                _cam.transform.position.x + halfWidth - 0.5f
-            );
-        }
+        pos.x = Mathf.Clamp(
+            pos.x,
+            _cam.transform.position.x - halfWidth + 0.5f,
+            _cam.transform.position.x + halfWidth - 0.5f
+        );
 
         transform.position = pos;
 
-        // Shoot downward
+        // Shoot straight down
         if (Time.time >= _nextFireTime)
         {
             Shoot();
@@ -101,7 +91,6 @@ public class EnemyController : MonoBehaviour
     private void Shoot()
     {
         if (enemyBulletPrefab == null || firePoint == null) return;
-
         Instantiate(enemyBulletPrefab, firePoint.position, Quaternion.identity);
     }
 
