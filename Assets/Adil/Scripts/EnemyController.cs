@@ -1,137 +1,108 @@
 using UnityEngine;
 using System.Collections;
 
-public class EnemyController : MonoBehaviour, IDamageable
+public class EnemyController : MonoBehaviour
 {
+    [Header("Movement")]
+    public float enterSpeed = 2f;           // how fast enemy slides down into view
+    public float horizontalSpeed = 2f;      // left/right follow speed
+    public float stopOffsetFromTop = 0.5f;  // how far below top of screen enemy stops
 
-[Header("Stats")]
-[SerializeField] private int maxHealth = 3;
+    [Header("Shooting")]
+    public GameObject enemyBulletPrefab;
+    public Transform firePoint;
+    public float fireRate = 1.2f;
 
-[Header("Movement")]
-[SerializeField] private float enterSpeed = 2f;      // how fast it slides down into view
-[SerializeField] private float horizontalSpeed = 2f; // how fast it slides left/right
-[SerializeField] private float stopOffsetFromTop = 0.5f; // how far below top of screen it stops
+    private Camera _cam;
+    private Transform _player;
+    private float _targetY;
+    private float _nextFireTime;
 
-[Header("Shooting")]
-[SerializeField] private GameObject enemyBulletPrefab; // bullet that moves downward
-[SerializeField] private Transform firePoint;          // where bullets spawn from
-[SerializeField] private float fireRate = 1.2f;        // seconds between shots
+    private enum State { Entering, Attacking }
+    private State _state;
 
-private int _currentHealth;
-private Transform _player;
-private Camera _cam;
-private float _targetY;    // world y position where we stop entering
-private float _nextFireTime;
-
-private enum State { Entering, Attacking }
-private State _state;
-
-private void Start()
-{
-    _cam = Camera.main;
-    GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-    if (playerObj != null)
+    private void Start()
     {
-        _player = playerObj.transform;
+        _cam = Camera.main;
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+            _player = playerObj.transform;
+
+        // Calculate Y where enemy stops
+        float camTop = _cam.transform.position.y + _cam.orthographicSize;
+        _targetY = camTop - stopOffsetFromTop;
+
+        _state = State.Entering;
     }
 
-    _currentHealth = maxHealth;
-
-    // Calculate the y-position just under the top of the screen
-    float camTop = _cam.transform.position.y + _cam.orthographicSize;
-    _targetY = camTop - stopOffsetFromTop;
-
-    _state = State.Entering;
-}
-
-private void Update()
-{
-    if (_player == null) return;
-
-    switch (_state)
+    private void Update()
     {
-        case State.Entering:
-            HandleEntering();
-            break;
-        case State.Attacking:
-            HandleAttacking();
-            break;
-    }
-}
+        if (_player == null) return;
 
-private void HandleEntering()
-{
-    Vector3 pos = transform.position;
-    pos += Vector3.down * enterSpeed * Time.deltaTime;
+        switch (_state)
+        {
+            case State.Entering:
+                EnteringMovement();
+                break;
 
-    if (pos.y <= _targetY)
-    {
-        pos.y = _targetY;
-        _state = State.Attacking;
+            case State.Attacking:
+                AttackingBehaviour();
+                break;
+        }
     }
 
-    transform.position = pos;
-}
-
-private void HandleAttacking()
-{
-    Vector3 pos = transform.position;
-
-    // Move horizontally toward player, but only along X
-    float dx = _player.position.x - pos.x;
-    float direction = Mathf.Sign(dx);
-    float distance = Mathf.Abs(dx);
-
-    // Small dead zone so it doesn't jitter when very close
-    if (distance > 0.05f)
+    private void EnteringMovement()
     {
-        pos.x += direction * horizontalSpeed * Time.deltaTime;
+        Vector3 pos = transform.position;
+        pos += Vector3.down * enterSpeed * Time.deltaTime;
 
-       
-        float halfHeight = _cam.orthographicSize;
-        float halfWidth = halfHeight * _cam.aspect;
-        pos.x = Mathf.Clamp(
-            pos.x,
-            _cam.transform.position.x - halfWidth + 0.5f,
-            _cam.transform.position.x + halfWidth - 0.5f
-        );
+        if (pos.y <= _targetY)
+        {
+            pos.y = _targetY;
+            _state = State.Attacking;
+        }
 
         transform.position = pos;
     }
 
-    // Shoot straight down
-    if (Time.time >= _nextFireTime)
+    private void AttackingBehaviour()
     {
-        Shoot();
-        _nextFireTime = Time.time + fireRate;
+        Vector3 pos = transform.position;
+
+        // Horizontal follow only
+        float dx = _player.position.x - pos.x;
+        float direction = Mathf.Sign(dx);
+
+        if (Mathf.Abs(dx) > 0.05f)
+        {
+            pos.x += direction * horizontalSpeed * Time.deltaTime;
+
+            // Clamp within camera horizontal bounds
+            float halfHeight = _cam.orthographicSize;
+            float halfWidth = halfHeight * _cam.aspect;
+            pos.x = Mathf.Clamp(
+                pos.x,
+                _cam.transform.position.x - halfWidth + 0.5f,
+                _cam.transform.position.x + halfWidth - 0.5f
+            );
+        }
+
+        transform.position = pos;
+
+        // Shoot downward
+        if (Time.time >= _nextFireTime)
+        {
+            Shoot();
+            _nextFireTime = Time.time + fireRate;
+        }
     }
-}
 
-private void Shoot()
-{
-    if (enemyBulletPrefab == null || firePoint == null) return;
-    Instantiate(enemyBulletPrefab, firePoint.position, Quaternion.identity);
-    // Enemy bullet script will handle moving down.
-}
-
-// IDamageable
-public void TakeDamage(int amount)
-{
-    _currentHealth -= amount;
-    if (_currentHealth <= 0)
+    private void Shoot()
     {
-        Die();
-    }
-}
+        if (enemyBulletPrefab == null || firePoint == null) return;
 
-private void Die()
-{
-   
-    if (EnemySpawner.Instance != null)
-    {
-        EnemySpawner.Instance.NotifyEnemyDestroyed(this);
+        Instantiate(enemyBulletPrefab, firePoint.position, Quaternion.identity);
     }
 
-    Destroy(gameObject);
-}
 }
