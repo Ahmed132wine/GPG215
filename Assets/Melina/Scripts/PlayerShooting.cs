@@ -8,6 +8,7 @@ public class PlayerShooting : MonoBehaviour
 
     public int bulletLevel = 1;
     public float spreadAngle = 15f;
+    public float positionOffset = 0.2f;
 
     void Update()
     {
@@ -31,14 +32,17 @@ public class PlayerShooting : MonoBehaviour
         }
 
         float startAngle = -(spreadAngle * (bulletsToFire - 1) / 2);
+        float startOffset = -(positionOffset * (bulletsToFire - 1) / 2);
 
         for (int i = 0; i < bulletsToFire; i++)
         {
             float angle = startAngle + i * spreadAngle;
+            float offsetX = startOffset + i * positionOffset;
+
             GameObject bullet = ObjectPool.Instance.GetBullet();
             if (bullet != null)
             {
-                bullet.transform.position = firePoint.position;
+                bullet.transform.position = firePoint.position + new Vector3(offsetX, 0, 0);
                 bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
                 bullet.SetActive(true);
             }
