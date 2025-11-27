@@ -20,9 +20,10 @@ public class EnemyAI : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerHealth player = other.GetComponent<PlayerHealth>();
+
             if (player != null)
             {
-                player.TakeDamage(damageToPlayer);
+                player.TakeDamage(20);
             }
 
             Destroy(gameObject);

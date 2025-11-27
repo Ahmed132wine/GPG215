@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e000851dd6956f4489913934b00c0279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPowerup
-  fallSpeed: 0.05
+  fallSpeed: 3
 --- !u!60 &3198255995580824313
 PolygonCollider2D:
   m_ObjectHideFlags: 0

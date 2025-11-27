@@ -18,6 +18,9 @@ public class EnemyHealth : MonoBehaviour
     [Header("Score")]
     public int scoreValue = 100;
 
+    [Range(0, 100)]
+    public float dropChance = 20f;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -51,15 +54,17 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
-        if (bulletPowerupPrefab != null)
-            Instantiate(bulletPowerupPrefab, transform.position, Quaternion.identity);
+        float roll = Random.Range(0f, 100f);
+
+        if (roll <= dropChance)
+        {
+            if (bulletPowerupPrefab != null)
+            {
+                Instantiate(bulletPowerupPrefab, transform.position, Quaternion.identity);
+            }
+        }
 
         GameManager.Instance?.AddScore(scoreValue);
-
-        
-        if (EnemySpawner.Instance != null)
-            EnemySpawner.Instance.NotifyEnemyDestroyed();
-
         Destroy(gameObject);
     }
 }
