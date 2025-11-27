@@ -1,21 +1,26 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerShooting : MonoBehaviour
 {
+    [Header("Base Stats")]
     public Transform firePoint;
-    public float fireRate = 0.3f;
+    public float normalFireRate = 0.3f;
+    
+    [Header("Overdrive Stats ")]
+    public float overdriveFireRate = 0.1f;
+    public float overdriveDuration = 5f;
+    
+    private bool isOverdrive = false;
     private float nextFire = 0f;
-
-    public int bulletLevel = 1;
-    public float spreadAngle = 15f;
-    public float positionOffset = 0.2f;
 
     void Update()
     {
         if (Input.GetMouseButton(0) && Time.time >= nextFire)
         {
             Shoot();
-            nextFire = Time.time + fireRate;
+            float rate = isOverdrive ? overdriveFireRate : normalFireRate;
+            nextFire = Time.time + rate;
         }
     }
 
@@ -23,35 +28,45 @@ public class PlayerShooting : MonoBehaviour
     {
         if (firePoint == null || ObjectPool.Instance == null) return;
 
-        int bulletsToFire = 1;
-        switch (bulletLevel)
+        if (isOverdrive)
         {
-            case 1: bulletsToFire = 1; break;
-            case 2: bulletsToFire = 3; break;
-            case 3: bulletsToFire = 5; break;
+            SpawnBullet(0);
+            SpawnBullet(15);
+            SpawnBullet(-15);
         }
 
-        float startAngle = -(spreadAngle * (bulletsToFire - 1) / 2);
-        float startOffset = -(positionOffset * (bulletsToFire - 1) / 2);
-
-        for (int i = 0; i < bulletsToFire; i++)
+        else
         {
-            float angle = startAngle + i * spreadAngle;
-            float offsetX = startOffset + i * positionOffset;
-
-            GameObject bullet = ObjectPool.Instance.GetBullet();
-            if (bullet != null)
-            {
-                bullet.transform.position = firePoint.position + new Vector3(offsetX, 0, 0);
-                bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
-                bullet.SetActive(true);
-            }
+            SpawnBullet(0);
         }
     }
 
-    public void UpgradeBullet()
+    void SpawnBullet(float angle)
     {
-        bulletLevel++;
-        if (bulletLevel > 3) bulletLevel = 3;
+        GameObject bullet = ObjectPool.Instance.GetBullet();
+        if (bullet != null)
+        {
+            bullet.transform.position = firePoint.position;
+            bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
+            bullet.SetActive(true);
+        }
     }
+
+    public void ActivateOverdrive()
+    {
+        StopCoroutine("OverdriveRoutine");
+        StartCoroutine("OverdriveRoutine");
+    }
+
+    IEnumerator OverdriveRoutine()
+    {
+        isOverdrive = true;
+        
+        GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(overdriveDuration);
+        
+        isOverdrive = false;
+        GetComponent<SpriteRenderer>().color = Color.white;
+        Debug.Log("Overdrive Ended.");
+    } 
 }

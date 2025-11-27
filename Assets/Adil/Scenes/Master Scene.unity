@@ -339,6 +339,37 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   healthText: {fileID: 1517955810}
+--- !u!1 &718544813
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 718544814}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &718544814
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718544813}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.67, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1166093643}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &807817763
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,10 +830,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
   firePoint: {fileID: 1027513256}
-  fireRate: 0.2
-  bulletLevel: 1
-  spreadAngle: 15
-  positionOffset: 0.2
+  normalFireRate: 0.3
+  overdriveFireRate: 0.1
+  overdriveDuration: 5
 --- !u!1 &1414102491
 GameObject:
   m_ObjectHideFlags: 0
@@ -1686,13 +1716,16 @@ PrefabInstance:
     - target: {fileID: 8545464929229868580, guid: 29e506920bae20a479a2cc28e4532014, type: 3}
       propertyPath: bulletPowerupPrefab
       value: 
-      objectReference: {fileID: 3487250054094334891, guid: ace9471c470484949b69054f950cb39b, type: 3}
+      objectReference: {fileID: 3037921866348241792, guid: fdd80d0f944f7534c85572120b0bdca1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2990044021150733190, guid: 29e506920bae20a479a2cc28e4532014, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1708042683}
+    - targetCorrespondingSourceObject: {fileID: 2990044021150733190, guid: 29e506920bae20a479a2cc28e4532014, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 718544814}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29e506920bae20a479a2cc28e4532014, type: 3}
 --- !u!1660057539 &9223372036854775807
