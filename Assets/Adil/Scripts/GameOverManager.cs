@@ -25,7 +25,7 @@ public class GameOverManager : MonoBehaviour
     {
         if (gameOverPanel != null)
         {
-            gameObject.SetActive(true);
+            gameOverPanel.SetActive(true);
 
             if (ScoreManager.instance != null)
             {
