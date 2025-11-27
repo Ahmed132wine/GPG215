@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MenuManager : MonoBehaviour
+public class MainMenuManager : MonoBehaviour
 {
     [Header("Panels")]
     public GameObject mainMenuPanel;
@@ -33,7 +33,9 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
-        if (gameTitleText != null) gameTitleText.text = gameTitleText.text;
+        if (gameTitleText != null)
+            gameTitleText.text = gameTitleText.text;
+
         ShowMainMenu();
     }
 
@@ -46,7 +48,9 @@ public class MenuManager : MonoBehaviour
         if (playerUI != null) playerUI.SetActive(false);
         if (enemy != null) enemy.SetActive(false);
         if (enemyUI != null) enemyUI.SetActive(false);
-        if (backButton != null) backButton.gameObject.SetActive(false);
+
+        if (backButton != null)
+            backButton.gameObject.SetActive(false);
     }
 
     public void StartGame()
@@ -58,11 +62,15 @@ public class MenuManager : MonoBehaviour
         if (playerUI != null) playerUI.SetActive(true);
         if (enemy != null) enemy.SetActive(true);
         if (enemyUI != null) enemyUI.SetActive(true);
-        if (backButton != null) backButton.gameObject.SetActive(false);
+
+        if (backButton != null)
+            backButton.gameObject.SetActive(false);
     }
 
     public void ShowCredits()
     {
+        Debug.Log("Credits panel opened");
+
         mainMenuPanel.SetActive(false);
         creditsPanel.SetActive(true);
 
@@ -70,7 +78,9 @@ public class MenuManager : MonoBehaviour
         if (playerUI != null) playerUI.SetActive(false);
         if (enemy != null) enemy.SetActive(false);
         if (enemyUI != null) enemyUI.SetActive(false);
-        if (backButton != null) backButton.gameObject.SetActive(true);
+
+        if (backButton != null)
+            backButton.gameObject.SetActive(true);
     }
 
     public void BackToMenu()

@@ -150,6 +150,7 @@ MonoBehaviour:
   healthFill: {fileID: 0}
   bulletPowerupPrefab: {fileID: 3037921866348241792, guid: 710ad2cd93d76b14fa75fcb94ef3797b, type: 3}
   scoreValue: 100
+  dropChance: 20
 --- !u!114 &6691259758984276730
 MonoBehaviour:
   m_ObjectHideFlags: 0
