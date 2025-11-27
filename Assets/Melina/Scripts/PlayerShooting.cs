@@ -12,7 +12,7 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButton("Fire1") && Time.time >= nextFire)
+        if (Input.GetMouseButton(0) && Time.time >= nextFire)
         {
             Shoot();
             nextFire = Time.time + fireRate;
