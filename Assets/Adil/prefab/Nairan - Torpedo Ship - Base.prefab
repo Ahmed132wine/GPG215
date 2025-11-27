@@ -13,6 +13,10 @@ PrefabInstance:
       value: Nairan - Torpedo Ship - Base
       objectReference: {fileID: 0}
     - target: {fileID: -2253911629886400664, guid: d2b48a1d870ccb44499d6ae922a94160, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2253911629886400664, guid: d2b48a1d870ccb44499d6ae922a94160, type: 3}
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}

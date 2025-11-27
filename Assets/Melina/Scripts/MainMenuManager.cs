@@ -13,6 +13,7 @@ public class MainMenuManager : MonoBehaviour
     public GameObject playerUI;
     public GameObject enemy;
     public GameObject enemyUI;
+    public GameObject scrollingBackground;
 
     [Header("UI Elements")]
     public TextMeshProUGUI gameTitleText;
@@ -49,6 +50,8 @@ public class MainMenuManager : MonoBehaviour
         if (enemy != null) enemy.SetActive(false);
         if (enemyUI != null) enemyUI.SetActive(false);
 
+        if (scrollingBackground != null) scrollingBackground.SetActive(false);
+
         if (backButton != null)
             backButton.gameObject.SetActive(false);
     }
@@ -62,6 +65,8 @@ public class MainMenuManager : MonoBehaviour
         if (playerUI != null) playerUI.SetActive(true);
         if (enemy != null) enemy.SetActive(true);
         if (enemyUI != null) enemyUI.SetActive(true);
+
+        if (scrollingBackground != null) scrollingBackground.SetActive(true);
 
         if (backButton != null)
             backButton.gameObject.SetActive(false);
@@ -78,6 +83,8 @@ public class MainMenuManager : MonoBehaviour
         if (playerUI != null) playerUI.SetActive(false);
         if (enemy != null) enemy.SetActive(false);
         if (enemyUI != null) enemyUI.SetActive(false);
+
+        if (scrollingBackground != null) scrollingBackground.SetActive(false);
 
         if (backButton != null)
             backButton.gameObject.SetActive(true);
