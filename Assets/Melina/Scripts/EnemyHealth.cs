@@ -55,6 +55,11 @@ public class EnemyHealth : MonoBehaviour
             Instantiate(bulletPowerupPrefab, transform.position, Quaternion.identity);
 
         GameManager.Instance?.AddScore(scoreValue);
+
+        
+        if (EnemySpawner.Instance != null)
+            EnemySpawner.Instance.NotifyEnemyDestroyed();
+
         Destroy(gameObject);
     }
 }
