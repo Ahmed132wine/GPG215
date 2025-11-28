@@ -20,15 +20,12 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Buttons")]
     public Button startButton;
-    public Button creditsButton;
     public Button backButton;
     public Button quitButton;
 
     void Awake()
     {
         if (startButton != null) startButton.onClick.AddListener(StartGame);
-        if (creditsButton != null) creditsButton.onClick.AddListener(ShowCredits);
-        if (backButton != null) backButton.onClick.AddListener(BackToMenu);
         if (quitButton != null) quitButton.onClick.AddListener(QuitGame);
     }
 
@@ -43,7 +40,6 @@ public class MainMenuManager : MonoBehaviour
     public void ShowMainMenu()
     {
         mainMenuPanel.SetActive(true);
-        creditsPanel.SetActive(false);
 
         if (player != null) player.SetActive(false);
         if (playerUI != null) playerUI.SetActive(false);
@@ -59,7 +55,6 @@ public class MainMenuManager : MonoBehaviour
     public void StartGame()
     {
         mainMenuPanel.SetActive(false);
-        creditsPanel.SetActive(false);
 
         if (player != null) player.SetActive(true);
         if (playerUI != null) playerUI.SetActive(true);
@@ -70,24 +65,6 @@ public class MainMenuManager : MonoBehaviour
 
         if (backButton != null)
             backButton.gameObject.SetActive(false);
-    }
-
-    public void ShowCredits()
-    {
-        Debug.Log("Credits panel opened");
-
-        mainMenuPanel.SetActive(false);
-        creditsPanel.SetActive(true);
-
-        if (player != null) player.SetActive(false);
-        if (playerUI != null) playerUI.SetActive(false);
-        if (enemy != null) enemy.SetActive(false);
-        if (enemyUI != null) enemyUI.SetActive(false);
-
-        if (scrollingBackground != null) scrollingBackground.SetActive(false);
-
-        if (backButton != null)
-            backButton.gameObject.SetActive(true);
     }
 
     public void BackToMenu()
