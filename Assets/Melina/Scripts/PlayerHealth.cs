@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 public class PlayerHealth : MonoBehaviour
@@ -16,6 +16,9 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int dmg)
     {
         currentHealth -= dmg;
+
+        
+        AudioManager.Instance?.PlayPlayerDamage();
 
         if (currentHealth <= 0)
         {
@@ -38,7 +41,7 @@ public class PlayerHealth : MonoBehaviour
         {
             GameOverManager.instance.TriggerGameOver();
         }
-        
+
         Debug.Log("Player Died!!!");
     }
 }

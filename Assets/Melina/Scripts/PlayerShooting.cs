@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class PlayerShooting : MonoBehaviour
@@ -6,11 +6,11 @@ public class PlayerShooting : MonoBehaviour
     [Header("Base Stats")]
     public Transform firePoint;
     public float normalFireRate = 0.3f;
-    
+
     [Header("Overdrive Stats ")]
     public float overdriveFireRate = 0.1f;
     public float overdriveDuration = 5f;
-    
+
     private bool isOverdrive = false;
     private float nextFire = 0f;
 
@@ -30,15 +30,19 @@ public class PlayerShooting : MonoBehaviour
 
         if (isOverdrive)
         {
+          
             SpawnBullet(0);
             SpawnBullet(15);
             SpawnBullet(-15);
         }
-
         else
         {
+            
             SpawnBullet(0);
         }
+
+        
+        AudioManager.Instance?.PlayPlayerShoot();
     }
 
     void SpawnBullet(float angle)
@@ -61,12 +65,12 @@ public class PlayerShooting : MonoBehaviour
     IEnumerator OverdriveRoutine()
     {
         isOverdrive = true;
-        
+
         GetComponent<SpriteRenderer>().color = Color.red;
         yield return new WaitForSeconds(overdriveDuration);
-        
+
         isOverdrive = false;
         GetComponent<SpriteRenderer>().color = Color.white;
         Debug.Log("Overdrive Ended.");
-    } 
+    }
 }
