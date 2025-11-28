@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2253911629886400664, guid: d2b48a1d870ccb44499d6ae922a94160, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2253911629886400664, guid: d2b48a1d870ccb44499d6ae922a94160, type: 3}
       propertyPath: m_TagString
@@ -156,7 +156,7 @@ MonoBehaviour:
   maxHealth: 20
   healthCanvas: {fileID: 0}
   healthFill: {fileID: 0}
-  bulletPowerupPrefab: {fileID: 3037921866348241792, guid: 710ad2cd93d76b14fa75fcb94ef3797b, type: 3}
+  bulletPowerupPrefab: {fileID: 6207775326806273292, guid: 45dfb556fc25ca54e85011f1cf0c18ba, type: 3}
   scoreValue: 100
   dropChance: 20
 --- !u!114 &6691259758984276730

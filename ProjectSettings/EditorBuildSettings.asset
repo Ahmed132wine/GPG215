@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Melina/MainMenuScene.unity
+    guid: 684d44e82ebc14c40b30b805df4aeb05
+  - enabled: 1
     path: Assets/Adil/Scenes/Master Scene.unity
     guid: fded8cd41922f6242aee74687b70494f
   m_configObjects:

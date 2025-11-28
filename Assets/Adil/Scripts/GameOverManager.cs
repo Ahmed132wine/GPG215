@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using TMPro;
 
 public class GameOverManager : MonoBehaviour
@@ -9,10 +10,14 @@ public class GameOverManager : MonoBehaviour
     [Header("UI Reference")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TextMeshProUGUI finalScoreText;
+    
+    [Header("Buttons")]
+    public Button quitButton;
 
     private void Awake()
     {
         if (instance == null) instance = this;
+        if (quitButton != null) quitButton.onClick.AddListener(QuitGame);
     }
 
     private void Start()
@@ -47,6 +52,12 @@ public class GameOverManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
+    }
+    
+    public void QuitGame()
+    {
+        Debug.Log("Quit pressed");
+        Application.Quit();
     }
 
 }
