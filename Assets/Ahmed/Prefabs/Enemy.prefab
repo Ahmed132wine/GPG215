@@ -213,7 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a59674231790c74f9bb7476d629abad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 20
+  maxHealth: 80
   healthCanvas: {fileID: 6689195079667115470}
   healthFill: {fileID: 6713452168956773605}
   bulletPowerupPrefab: {fileID: 3037921866348241792, guid: fdd80d0f944f7534c85572120b0bdca1, type: 3}
@@ -279,6 +279,7 @@ MonoBehaviour:
   enterSpeed: 3
   horizontalSpeed: 2
   stopOffsetFromTop: 2
+  laneOffset: 1.5
   enemyBulletPrefab: {fileID: 364445126848632595, guid: d99ec074a6ef0a74db528eb22b993645, type: 3}
   firePoint: {fileID: 3143540237332308625}
   fireRate: 1.2
