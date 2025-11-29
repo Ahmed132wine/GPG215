@@ -24,17 +24,15 @@ public class Bullet : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             EnemyHealth enemy = other.GetComponent<EnemyHealth>();
-
             if (enemy != null)
             {
                 enemy.TakeDamage(5f);
             }
-
             Hide();
         }
-
     }
-    void Hide()
+
+    private void Hide()
     {
         gameObject.SetActive(false);
     }
