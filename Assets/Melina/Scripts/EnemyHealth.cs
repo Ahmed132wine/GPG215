@@ -65,7 +65,7 @@ public class EnemyHealth : MonoBehaviour
 
         if (shakeCameraOnDeath && CameraShake.Instance != null)
         {
-            CameraShake.Instance.TriggerShake();
+            CameraShake.Instance.TriggerShake(0.05f);
         }
 
         float roll = Random.Range(0f, 100f);

@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameOverManager
   gameOverPanel: {fileID: 1400009178}
   finalScoreText: {fileID: 1413716592}
+  highScoreText: {fileID: 0}
   quitButton: {fileID: 0}
 --- !u!4 &55953447
 Transform:
@@ -1559,7 +1560,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &851462542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1832,7 +1833,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 819d5cac3d9975c46a59864e97b08543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner1
-  enemyPrefab: {fileID: 2123071089678844513, guid: b0fe2c2e0a2304a4380a794b552829ef, type: 3}
+  normalEnemyPrefab: {fileID: 2123071089678844513, guid: b0fe2c2e0a2304a4380a794b552829ef, type: 3}
+  zigZagEnemyPrefab: {fileID: -2253911629886400664, guid: e8b9caec90d328a419f6b262e34b41c6, type: 3}
   initialSpawnRate: 2
   minimumSpawnRate: 0.5
   difficultyRamp: 0.05
@@ -2077,6 +2079,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   scoreText: {fileID: 1414102493}
+  score: 0
 --- !u!1 &1126612276
 GameObject:
   m_ObjectHideFlags: 0

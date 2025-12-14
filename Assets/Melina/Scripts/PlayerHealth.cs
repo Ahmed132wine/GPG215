@@ -27,6 +27,11 @@ public class PlayerHealth : MonoBehaviour
         }
 
         UpdateHealthUI();
+
+        if (CameraShake.Instance != null)
+        {
+            CameraShake.Instance.TriggerShake(0.2f);
+        }
     }
 
     void UpdateHealthUI()

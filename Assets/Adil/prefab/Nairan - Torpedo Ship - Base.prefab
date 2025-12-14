@@ -231,5 +231,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShooting
   enemyBulletPrefab: {fileID: 3487250054094334891, guid: ace9471c470484949b69054f950cb39b, type: 3}
   firePoint: {fileID: 0}
-  minFireRate: 0.4
+  minFireRate: 0.6
   maxFireRate: 1.5
