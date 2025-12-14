@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class EnemySpawner1 : MonoBehaviour
 {
+    [Header("Enemy Types")]
+    public GameObject normalEnemyPrefab;
+    public GameObject zigZagEnemyPrefab;
+
     [Header("Settings")]
-    public GameObject enemyPrefab;
     public float initialSpawnRate = 2f;
     public float minimumSpawnRate = 0.5f;
     public float difficultyRamp = 0.05f;
@@ -18,9 +21,9 @@ public class EnemySpawner1 : MonoBehaviour
         currentSpawnRate = initialSpawnRate;
         mainCamera = Camera.main;
 
-        if (enemyPrefab != null)
+        if (normalEnemyPrefab != null)
         {
-            SpriteRenderer sr = enemyPrefab.GetComponent<SpriteRenderer>();
+            SpriteRenderer sr = normalEnemyPrefab.GetComponent<SpriteRenderer>();
             if (sr != null)
             {
                 enemyWidth = sr.bounds.extents.x;
@@ -53,7 +56,17 @@ public class EnemySpawner1 : MonoBehaviour
         float spawnY = mainCamera.orthographicSize + 2f;
 
         Vector3 spawnPos = new Vector3(randomX, spawnY, 0);
-        Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+
+        GameObject prefabToSpawn = normalEnemyPrefab;
+
+        if (zigZagEnemyPrefab != null && Random.value > 0.7f)
+        {
+            prefabToSpawn = zigZagEnemyPrefab;
+        }
+
+        Quaternion rotation = Quaternion.Euler(0, 0, 180f);
+
+        Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
 
     }
 }

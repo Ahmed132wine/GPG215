@@ -10,14 +10,14 @@ public class GameOverManager : MonoBehaviour
     [Header("UI Reference")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TextMeshProUGUI finalScoreText;
-    
+    [SerializeField] private TextMeshProUGUI highScoreText;
+
     [Header("Buttons")]
     public Button quitButton;
 
     private void Awake()
     {
         if (instance == null) instance = this;
-        if (quitButton != null) quitButton.onClick.AddListener(QuitGame);
     }
 
     private void Start()
@@ -32,14 +32,31 @@ public class GameOverManager : MonoBehaviour
         {
             gameOverPanel.SetActive(true);
 
-            if (ScoreManager.instance != null)
+            int currentScore = 0;
+
+            if (GameManager.Instance != null)
             {
-                finalScoreText.text = ScoreManager.instance.scoreText.text;
+                currentScore = GameManager.Instance.GetScore();
+
+                finalScoreText.text = "Score: " + currentScore;
+            }
+
+            int oldHighScore = PlayerPrefs.GetInt("HighScore", 0);
+
+            if (currentScore > oldHighScore)
+            {
+                PlayerPrefs.SetInt("HighScore", currentScore);
+                PlayerPrefs.Save();
+                oldHighScore = currentScore;
+            }
+
+            if (highScoreText != null)
+            {
+                highScoreText.text = "High Score: " + oldHighScore;
             }
         }
 
         Time.timeScale = 0f;
-        Debug.Log("Game Over");
     }
 
     public void RestartGame()
@@ -54,10 +71,5 @@ public class GameOverManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
     
-    public void QuitGame()
-    {
-        Debug.Log("Quit pressed");
-        Application.Quit();
-    }
-
+  
 }
