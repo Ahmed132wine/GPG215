@@ -4,20 +4,28 @@ public class EnemySpawner1 : MonoBehaviour
 {
     [Header("Settings")]
     public GameObject enemyPrefab;
-    public float spawnRate = 2f;
-    public float xLimit = 2.5f;
-
-    [Header("Difficulty")]
     public float initialSpawnRate = 2f;
     public float minimumSpawnRate = 0.5f;
     public float difficultyRamp = 0.05f;
 
     private float currentSpawnRate;
     private float nextSpawn = 0f;
+    private Camera mainCamera;
+    private float enemyWidth;
 
     private void Start()
     {
         currentSpawnRate = initialSpawnRate;
+        mainCamera = Camera.main;
+
+        if (enemyPrefab != null)
+        {
+            SpriteRenderer sr = enemyPrefab.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                enemyWidth = sr.bounds.extents.x;
+            }
+        }
     }
 
     private void Update()
@@ -25,8 +33,8 @@ public class EnemySpawner1 : MonoBehaviour
         if (Time.time >= nextSpawn)
         {
             SpawnEnemy();
-            currentSpawnRate -= difficultyRamp;
 
+            currentSpawnRate -= difficultyRamp;
             if (currentSpawnRate < minimumSpawnRate)
                 currentSpawnRate = minimumSpawnRate;
 
@@ -36,9 +44,16 @@ public class EnemySpawner1 : MonoBehaviour
 
     void SpawnEnemy()
     {
-        float randomX = Random.Range(-xLimit, xLimit);
-        Vector3 spawnPos = new Vector3(randomX, 6f, 0);
+        float screenHalfWidthInWorld = mainCamera.aspect * mainCamera.orthographicSize;
 
+        float xLimit = screenHalfWidthInWorld - enemyWidth;
+
+        float randomX = Random.Range(-xLimit, xLimit);
+
+        float spawnY = mainCamera.orthographicSize + 2f;
+
+        Vector3 spawnPos = new Vector3(randomX, spawnY, 0);
         Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+
     }
 }

@@ -7,6 +7,10 @@ public class EnemyHealth : MonoBehaviour
     public float maxHealth = 20f;
     private float currentHealth;
 
+    [Header("Visual Effects")]
+    public GameObject explosionPrefab;
+    public bool shakeCameraOnDeath = true;
+
     [Header("UI")]
     public Canvas healthCanvas;
     public Image healthFill;
@@ -54,6 +58,16 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
+        if (explosionPrefab != null)
+        {
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        }
+
+        if (shakeCameraOnDeath && CameraShake.Instance != null)
+        {
+            CameraShake.Instance.TriggerShake();
+        }
+
         float roll = Random.Range(0f, 100f);
 
         if (roll <= dropChance)
