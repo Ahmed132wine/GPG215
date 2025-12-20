@@ -1,16 +1,21 @@
 using UnityEngine;
 using System.Collections;
+using static NormalWeapon;
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float paddingX = 0.5f;
+    [SerializeField]  float moveSpeed = 10f;
+    [SerializeField]  float paddingX = 0.5f;
 
     [Header("Shooting")]
-    [SerializeField] private float fireRate = 0.2f;
-    [SerializeField] private Transform firePoint;
-    private float nextFireTime = 0f;
+    [SerializeField]  float fireRate = 0.2f;
+    [SerializeField]  Transform firePoint;
+    float nextFireTime = 0f;
+
+    private IWeaponStrategy currentWeapon;
+    private IWeaponStrategy defaultWeapon;
+    private IWeaponStrategy overdriveWeapon;
 
     private Camera mainCamera;
     private Vector2 minScreenBounds;
@@ -19,9 +24,15 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        mainCamera =Camera.main;
+        mainCamera = Camera.main;
         CalculateBounds();
+
+        defaultWeapon = new NormalWeapon();
+        overdriveWeapon = new TripleShotWeapon();
+
+        currentWeapon = defaultWeapon;
     }
+
     private void CalculateBounds()
     {
         minScreenBounds = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0));
@@ -50,21 +61,26 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
         {
-            Shoot();
+            if (currentWeapon != null)
+            {
+                currentWeapon.Fire(firePoint);
+            }
             nextFireTime = Time.time + fireRate;
         }
     }
 
-    private void Shoot()
+    public void ActivateOverdrive(float duration)
     {
-        GameObject bullet = ObjectPool.Instance.GetBullet();
+        StopAllCoroutines();
+        StartCoroutine(OverdriveRoutine(duration));
+    }
 
-        if (bullet != null)
-        {
-            bullet.transform.position = transform.position;
-            bullet.transform.rotation = Quaternion.identity;
+    private IEnumerator OverdriveRoutine(float duration)
+    {
+        currentWeapon = overdriveWeapon;
 
-            bullet.SetActive(true);
-        }
+        yield return new WaitForSeconds(duration);
+
+        currentWeapon = defaultWeapon;
     }
 }

@@ -3,32 +3,22 @@ using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager instance;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    private int currentScore = 0;
 
-    int score = 0;
-
-    [Header("UI")]
-    public TextMeshProUGUI scoreText;
-
-    void Awake()
+    private void OnEnable()
     {
-        instance = this;
+        GameEvents.OnEnemyKilled += AddScore;
     }
 
-    void Start()
+    private void OnDisable()
     {
-        UpdateScoreUI();
+        GameEvents.OnEnemyKilled -= AddScore;
     }
 
-    public void AddScore(int amount)
+    private void AddScore(int amount)
     {
-        score += amount;
-        UpdateScoreUI();
-    }
-
-    void UpdateScoreUI()
-    {
-        if (scoreText != null)
-            scoreText.text = "Score: " + score;
+        currentScore += amount;
+        scoreText.text = "Score: " + currentScore;
     }
 }
