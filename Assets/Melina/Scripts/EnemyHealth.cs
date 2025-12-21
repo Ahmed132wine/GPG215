@@ -18,12 +18,10 @@ public class EnemyHealth : MonoBehaviour
 
     [Header("Power-Up")]
     public GameObject bulletPowerupPrefab;
+    [Range(0, 100)] public float dropChance = 20f;
 
     [Header("Score")]
     public int scoreValue = 100;
-
-    [Range(0, 100)]
-    public float dropChance = 20f;
 
     private void Start()
     {
@@ -66,7 +64,10 @@ public class EnemyHealth : MonoBehaviour
         if (Random.Range(0f, 100f) <= dropChance && bulletPowerupPrefab != null)
             Instantiate(bulletPowerupPrefab, transform.position, Quaternion.identity);
 
-        GameEvents.OnEnemyKilled?.Invoke(scoreValue);
+        if (GameFlow.Instance != null)
+        {
+            GameFlow.Instance.AddScore(scoreValue);
+        }
 
         Destroy(gameObject);
     }

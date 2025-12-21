@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public enum GameMode { Menu, Playing, Paused, GameOver }
 public class GameFlow : MonoBehaviour
@@ -9,6 +10,10 @@ public class GameFlow : MonoBehaviour
     public GameObject menuPanel;
     public GameObject pausePanel;
     public GameObject losePanel;
+    
+    [Header("UI Text")]
+    public TextMeshProUGUI gameplayScoreText;
+    public TextMeshProUGUI finalScoreText;
     
     public GameMode currentMode;
     private int score;
@@ -22,6 +27,7 @@ public class GameFlow : MonoBehaviour
     void Start()
     {
         SetMode(GameMode.Menu);
+        UpdateScoreDisplay(); 
     }
     public void SetMode(GameMode newMode)
     {
@@ -32,6 +38,11 @@ public class GameFlow : MonoBehaviour
         if (menuPanel) menuPanel.SetActive(newMode == GameMode.Menu);
         if (pausePanel) pausePanel.SetActive(newMode == GameMode.Paused);
         if (losePanel) losePanel.SetActive(newMode == GameMode.GameOver);
+
+        if (newMode == GameMode.GameOver)
+        {
+            HandleGameOver();
+        }
     }
     
     public void SetModeInt(int modeIndex)
@@ -41,18 +52,13 @@ public class GameFlow : MonoBehaviour
 
     public void StartGame()
     {
+        score = 0;
+        UpdateScoreDisplay();
         SetMode(GameMode.Playing);
-    }
-
-    public void PauseGame()
-    {
-        SetMode(GameMode.Paused);
     }
     
-    public void ResumeGame()
-    {
-        SetMode(GameMode.Playing);
-    }
+    public void PauseGame() => SetMode(GameMode.Paused);
+    public void ResumeGame() => SetMode(GameMode.Playing);
 
     public void RestartGame()
     {
@@ -61,6 +67,18 @@ public class GameFlow : MonoBehaviour
     public void AddScore(int points)
     {
         score += points;
-        Debug.Log("Current Score: " + score);
+        UpdateScoreDisplay();
+    }
+
+    private void UpdateScoreDisplay()
+    {
+        if (gameplayScoreText != null)
+            gameplayScoreText.text = "Score: " + score;
+    }
+
+    private void HandleGameOver()
+    {
+        if (finalScoreText != null)
+            finalScoreText.text = "Score: " + score;
     }
 }
