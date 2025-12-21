@@ -7,7 +7,7 @@ public class PlayerShooting : MonoBehaviour
     public Transform firePoint;
     public float normalFireRate = 0.3f;
 
-    [Header("Overdrive Stats ")]
+    [Header("Overdrive Stats")]
     public float overdriveFireRate = 0.1f;
     public float overdriveDuration = 5f;
 
@@ -16,9 +16,12 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(0) && Time.time >= nextFire)
+        if (GameFlow.Instance.currentMode != GameMode.Playing) return;
+        
+        if (Input.GetMouseButton(0) && Time.time > nextFire)
         {
             Shoot();
+            
             float rate = isOverdrive ? overdriveFireRate : normalFireRate;
             nextFire = Time.time + rate;
         }
@@ -30,14 +33,12 @@ public class PlayerShooting : MonoBehaviour
 
         if (isOverdrive)
         {
-          
             SpawnBullet(0);
             SpawnBullet(15);
             SpawnBullet(-15);
         }
         else
         {
-            
             SpawnBullet(0);
         }
 
@@ -66,11 +67,16 @@ public class PlayerShooting : MonoBehaviour
     {
         isOverdrive = true;
 
-        GetComponent<SpriteRenderer>().color = Color.red;
-        yield return new WaitForSeconds(overdriveDuration);
+        if (GetComponent<SpriteRenderer>() != null)
+            GetComponent<SpriteRenderer>().color = Color.red;
 
+        yield return new WaitForSeconds(overdriveDuration);
+        
         isOverdrive = false;
-        GetComponent<SpriteRenderer>().color = Color.white;
-        Debug.Log("Overdrive Ended.");
+
+        if (GetComponent<SpriteRenderer>() != null)
+            GetComponent<SpriteRenderer>().color = Color.white;
+
+        Debug.Log("OverdriveEnded");
     }
 }
