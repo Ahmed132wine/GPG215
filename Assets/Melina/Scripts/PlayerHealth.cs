@@ -3,50 +3,39 @@ using TMPro;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Stats")]
     public int maxHealth = 100;
-    public int currentHealth;
+    private int currentHealth;
+    
+    [Header("UI")]
     public TextMeshProUGUI healthText;
-
+    
     void Start()
     {
         currentHealth = maxHealth;
-        UpdateHealthUI();
+        UpdateUI();
     }
 
-    public void TakeDamage(int dmg)
+    public void TakeDamage(int amount)
     {
-        currentHealth -= dmg;
-
+        if (GameFlow.Instance.currentMode != GameMode.Playing) return;
+        currentHealth -= amount;
         
+        if (CameraShake.Instance != null) CameraShake.Instance.TriggerShake(0.2f);
         AudioManager.Instance?.PlayPlayerDamage();
 
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Die();
+            GameFlow.Instance.SetMode(GameMode.GameOver);
         }
-
-        UpdateHealthUI();
-
-        if (CameraShake.Instance != null)
-        {
-            CameraShake.Instance.TriggerShake(0.2f);
-        }
+        
+        UpdateUI();
     }
-
-    void UpdateHealthUI()
+    
+    void UpdateUI()
     {
         if (healthText != null)
             healthText.text = "HP: " + currentHealth;
-    }
-
-    void Die()
-    {
-        if (GameOverManager.instance != null)
-        {
-            GameOverManager.instance.TriggerGameOver();
-        }
-
-        Debug.Log("Player Died!!!");
     }
 }

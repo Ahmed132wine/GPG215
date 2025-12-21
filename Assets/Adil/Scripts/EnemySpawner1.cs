@@ -2,37 +2,27 @@ using UnityEngine;
 
 public class EnemySpawner1 : MonoBehaviour
 {
-    [Header("Enemy Types")]
-    public GameObject normalEnemyPrefab;
-    public GameObject zigZagEnemyPrefab;
+    public EnemyFactory factory;
 
-    [Header("Settings")]
-    public float initialSpawnRate = 2f;
+    [Header("Settings")] public float initialSpawnRate = 2f;
     public float minimumSpawnRate = 0.5f;
     public float difficultyRamp = 0.05f;
 
     private float currentSpawnRate;
     private float nextSpawn = 0f;
     private Camera mainCamera;
-    private float enemyWidth;
+    private float enemyWidth = 0.5f;
 
     private void Start()
     {
         currentSpawnRate = initialSpawnRate;
         mainCamera = Camera.main;
-
-        if (normalEnemyPrefab != null)
-        {
-            SpriteRenderer sr = normalEnemyPrefab.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                enemyWidth = sr.bounds.extents.x;
-            }
-        }
     }
 
     private void Update()
     {
+        if (GameFlow.Instance.currentMode != GameMode.Playing) return;
+
         if (Time.time >= nextSpawn)
         {
             SpawnEnemy();
@@ -43,30 +33,27 @@ public class EnemySpawner1 : MonoBehaviour
 
             nextSpawn = Time.time + currentSpawnRate;
         }
+
     }
 
-    void SpawnEnemy()
+    private void SpawnEnemy()
     {
         float screenHalfWidthInWorld = mainCamera.aspect * mainCamera.orthographicSize;
-
         float xLimit = screenHalfWidthInWorld - enemyWidth;
-
         float randomX = Random.Range(-xLimit, xLimit);
-
         float spawnY = mainCamera.orthographicSize + 2f;
 
         Vector3 spawnPos = new Vector3(randomX, spawnY, 0);
 
-        GameObject prefabToSpawn = normalEnemyPrefab;
+        string type = (Random.value > 0.7f) ? "Fast" : "Simple";
 
-        if (zigZagEnemyPrefab != null && Random.value > 0.7f)
+        GameObject enemy = factory.MakeEnemy(type);
+
+        if (enemy != null)
         {
-            prefabToSpawn = zigZagEnemyPrefab;
+            enemy.transform.position = spawnPos;
+            enemy.transform.rotation = Quaternion.identity;
         }
-
-        Quaternion rotation = Quaternion.Euler(0, 0, 180f);
-
-        Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
-
     }
 }
+

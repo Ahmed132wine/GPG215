@@ -143,15 +143,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 55953445}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b02e17efadaa90a41a5f841b033564cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOverManager
-  gameOverPanel: {fileID: 1400009178}
-  finalScoreText: {fileID: 1413716592}
-  highScoreText: {fileID: 0}
-  quitButton: {fileID: 0}
 --- !u!4 &55953447
 Transform:
   m_ObjectHideFlags: 0
@@ -543,6 +539,69 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 198799065}
   m_CullTransparentMesh: 1
+--- !u!1 &201690009
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 201690012}
+  - component: {fileID: 201690011}
+  - component: {fileID: 201690010}
+  m_Layer: 0
+  m_Name: GameArchitect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &201690010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201690009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b42644fa4e43bd34397df2377ac39613, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyFactory
+  simpleEnemyPrefab: {fileID: 2123071089678844513, guid: b0fe2c2e0a2304a4380a794b552829ef, type: 3}
+  fastEnemyPrefab: {fileID: -2253911629886400664, guid: e8b9caec90d328a419f6b262e34b41c6, type: 3}
+--- !u!114 &201690011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201690009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eea86aa29e40cd64cad353732e5f6f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameFlow
+  menuPanel: {fileID: 851462541}
+  pausePanel: {fileID: 555479989}
+  losePanel: {fileID: 55953445}
+  currentMode: 0
+--- !u!4 &201690012
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201690009}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.00002, y: 0.00002, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &403456031
 GameObject:
   m_ObjectHideFlags: 0
@@ -1155,9 +1214,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 851462544}
+      - m_Target: {fileID: 201690009}
         m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
-        m_MethodName: StartGame
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1275,6 +1334,7 @@ MonoBehaviour:
   pausePanel: {fileID: 510997803}
   pauseText: {fileID: 955841930}
   pauseButton: {fileID: 2092273151}
+  isPaused: 0
 --- !u!1 &602553591
 GameObject:
   m_ObjectHideFlags: 0
@@ -1457,7 +1517,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 100
-  currentHealth: 0
   healthText: {fileID: 1517955810}
 --- !u!1 &846186845
 GameObject:
@@ -1606,7 +1665,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 851462541}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1f6b7c90fdbda347af211e5f52d5ed8, type: 3}
   m_Name: 
@@ -1833,8 +1892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 819d5cac3d9975c46a59864e97b08543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner1
-  normalEnemyPrefab: {fileID: 2123071089678844513, guid: b0fe2c2e0a2304a4380a794b552829ef, type: 3}
-  zigZagEnemyPrefab: {fileID: -2253911629886400664, guid: e8b9caec90d328a419f6b262e34b41c6, type: 3}
+  factory: {fileID: 201690010}
   initialSpawnRate: 2
   minimumSpawnRate: 0.5
   difficultyRamp: 0.05
@@ -2143,9 +2201,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 851462544}
+      - m_Target: {fileID: 201690009}
         m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2440,7 +2498,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 100
-  currentHealth: 0
   healthText: {fileID: 1517955810}
 --- !u!50 &1226120246
 Rigidbody2D:
@@ -3832,9 +3889,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 555479991}
+      - m_Target: {fileID: 201690009}
         m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
-        m_MethodName: TogglePause
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4059,3 +4116,4 @@ SceneRoots:
   - {fileID: 851462548}
   - {fileID: 7574745679088241818}
   - {fileID: 1936193339}
+  - {fileID: 201690012}
