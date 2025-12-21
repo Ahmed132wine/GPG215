@@ -15,7 +15,6 @@ public class GameFlow : MonoBehaviour
     
     void Awake()
     {
-        // Singleton setup
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
@@ -34,7 +33,31 @@ public class GameFlow : MonoBehaviour
         if (pausePanel) pausePanel.SetActive(newMode == GameMode.Paused);
         if (losePanel) losePanel.SetActive(newMode == GameMode.GameOver);
     }
+    
+    public void SetModeInt(int modeIndex)
+    {
+        SetMode((GameMode)modeIndex);
+    }
 
+    public void StartGame()
+    {
+        SetMode(GameMode.Playing);
+    }
+
+    public void PauseGame()
+    {
+        SetMode(GameMode.Paused);
+    }
+    
+    public void ResumeGame()
+    {
+        SetMode(GameMode.Playing);
+    }
+
+    public void RestartGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
     public void AddScore(int points)
     {
         score += points;
